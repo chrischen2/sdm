@@ -21,7 +21,7 @@
 
 + (id)readerWithFilePath:(NSString *)filePath
 {
-    return [[[self alloc] initWithFilePath:filePath] autorelease];
+    return [[self alloc] initWithFilePath:filePath];
 }
 
 - (id)initWithFilePath:(NSString *)filePath
@@ -84,7 +84,6 @@
         MACHdf5LinkInformation *linkInfo = [[MACHdf5LinkInformation alloc] initWithPath:path objectType:objectInfo.type];
         
         [info addObject:linkInfo];
-        [linkInfo release];
     }
     
     H5Gclose(groupId);
@@ -129,7 +128,7 @@
     
     H5Oclose(objectId);
     
-    return [objectInfo autorelease];
+    return objectInfo;
 }
 
 - (BOOL)hasAttribute:(NSString *)attributeName onPath:(NSString *)objectPath
@@ -794,8 +793,6 @@
 - (void)dealloc
 {
     H5Fclose(_fileId);
-    
-    [super dealloc];
 }
 
 @end

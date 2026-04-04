@@ -46,7 +46,7 @@
     for (MACHdf5LinkInformation *epochMember in epochMembers) {
         [epochPaths addObject:epochMember.path];
     }
-    block.epochEnumerator = [[[SMKEpochEnumerator alloc] initWithReader:_reader entityPaths:epochPaths] autorelease];
+    block.epochEnumerator = [[SMKEpochEnumerator alloc] initWithReader:_reader entityPaths:epochPaths];
 }
 
 @end

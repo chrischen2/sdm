@@ -42,9 +42,9 @@
                     context:(NSManagedObjectContext *)context
                   auisqlUrl:(NSURL *)auisqlUrl
 {
-    return [[[self alloc] initWithDataFilePath:dataFilePath
-                                       context:context
-                                     auisqlUrl:auisqlUrl] autorelease];
+    return [[self alloc] initWithDataFilePath:dataFilePath
+                                      context:context
+                                    auisqlUrl:auisqlUrl];
 }
 
 - (id)initWithDataFilePath:(NSString *)dataFilePath
@@ -53,9 +53,9 @@
 {
     self = [super init];
     if (self) {
-        _dataFilePath = [dataFilePath retain];
-        _context = [context retain];
-        _auisqlUrl = [auisqlUrl retain];
+        _dataFilePath = dataFilePath;
+        _context = context;
+        _auisqlUrl = auisqlUrl;
         _streams = [NSMutableSet set];
     }
     return self;
@@ -466,7 +466,6 @@
     if (!exists) {
         [_streams addObject:stream];
     }
-    [stream release];
 }
 
 - (void)addNotesFromEntity:(SMKEntity *)entity toExperiment:(Experiment *)experiment
@@ -492,15 +491,6 @@
     if (!isValid) {
         [NSException raise:@"Failed to validate object" format:@"Failed to validate object: %@", [error localizedDescription]];
     }
-}
-
-- (void)dealloc
-{
-    [_dataFilePath release];
-    [_context release];
-    [_auisqlUrl release];
-    
-    [super dealloc];
 }
 
 @end

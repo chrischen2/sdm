@@ -17,7 +17,7 @@
 
 + (id)readerForHdf5FilePath:(NSString *)hdf5FilePath
 {
-    return [[[self alloc] initWithHdf5FilePath:hdf5FilePath] autorelease];
+    return [[self alloc] initWithHdf5FilePath:hdf5FilePath];
 }
 
 - (id)initWithHdf5FilePath:(NSString *)hdf5FilePath
@@ -41,7 +41,7 @@
 
 - (SMKExperimentEnumerator *)experimentEnumerator
 {
-    return [[[SMKExperimentEnumerator alloc] initWithReader:_reader entityPaths: _experimentPaths] autorelease];
+    return [[SMKExperimentEnumerator alloc] initWithReader:_reader entityPaths: _experimentPaths];
 }
 
 @end

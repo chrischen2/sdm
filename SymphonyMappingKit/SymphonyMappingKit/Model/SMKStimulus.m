@@ -17,15 +17,4 @@
 @synthesize parameters = _parameters;
 @synthesize duration = _duration;
 
-- (void)dealloc
-{
-    [_stimulusId release];
-    [_units release];
-    [_sampleRate release];
-    [_sampleRateUnits release];
-    [_parameters release];
-    
-    [super dealloc];
-}
-
 @end

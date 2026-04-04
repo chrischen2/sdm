@@ -44,7 +44,7 @@
     group.label = [_reader readStringAttribute:@"label" onPath:path];
     
     NSString *sourcePath = [path stringByAppendingString:@"/source"];
-    SMKSourceEnumerator *sourceEnumerator = [[[SMKSourceEnumerator alloc] initWithReader:_reader entityPaths:[NSArray arrayWithObjects:sourcePath, nil]] autorelease];
+    SMKSourceEnumerator *sourceEnumerator = [[SMKSourceEnumerator alloc] initWithReader:_reader entityPaths:[NSArray arrayWithObjects:sourcePath, nil]];
     group.source = sourceEnumerator.nextObject;
     
     // Epoch Groups
@@ -53,7 +53,7 @@
     for (MACHdf5LinkInformation *groupMember in groupMembers) {
         [groupPaths addObject:groupMember.path];
     }
-    group.epochGroupEnumerator = [[[SMKEpochGroupEnumerator alloc] initWithReader:_reader entityPaths:groupPaths parent:group] autorelease];
+    group.epochGroupEnumerator = [[SMKEpochGroupEnumerator alloc] initWithReader:_reader entityPaths:groupPaths parent:group];
     
     // Epoch Blocks
     NSArray *blockMembers = [_reader groupMemberLinkInfoInPath:[path stringByAppendingString:@"/epochBlocks"]];
@@ -61,7 +61,7 @@
     for (MACHdf5LinkInformation *blockMember in blockMembers) {
         [blockPaths addObject:blockMember.path];
     }
-    group.epochBlockEnumerator = [[[SMKEpochBlockEnumerator alloc] initWithReader:_reader entityPaths:blockPaths epochGroup:group] autorelease];
+    group.epochBlockEnumerator = [[SMKEpochBlockEnumerator alloc] initWithReader:_reader entityPaths:blockPaths epochGroup:group];
 }
 
 @end

@@ -20,14 +20,4 @@
     return [_uuid isEqual:object.uuid];
 }
 
-- (void)dealloc
-{
-    [_uuid release];
-    [_properties release];
-    [_keywords release];
-    [_notes release];
-    
-    [super dealloc];
-}
-
 @end

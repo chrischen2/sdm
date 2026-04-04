@@ -15,14 +15,4 @@
 @synthesize sampleRate = _sampleRate;
 @synthesize sampleRateUnits = _sampleRateUnits;
 
-- (void)dealloc
-{
-    [_value release];
-    [_units release];
-    [_sampleRate release];
-    [_sampleRateUnits release];
-    
-    [super dealloc];
-}
-
 @end

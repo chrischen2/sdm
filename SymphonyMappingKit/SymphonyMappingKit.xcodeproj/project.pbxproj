@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -66,7 +66,7 @@
 		FC63E7461CA077120063737F /* SMKExperimentMapperTest.m in Sources */ = {isa = PBXBuildFile; fileRef = FC63E7451CA077120063737F /* SMKExperimentMapperTest.m */; };
 		FC6B6E21169612C0006B4688 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC6B6E20169612C0006B4688 /* Cocoa.framework */; };
 		FC6B6E2B169612C0006B4688 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FC6B6E29169612C0006B4688 /* InfoPlist.strings */; };
-		FC6B6E37169612C0006B4688 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC6B6E36169612C0006B4688 /* SenTestingKit.framework */; };
+		FC6B6E37169612C0006B4688 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC6B6E36169612C0006B4688 /* XCTest.framework */; };
 		FC6B6E38169612C0006B4688 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC6B6E20169612C0006B4688 /* Cocoa.framework */; };
 		FC6B6E3B169612C0006B4688 /* SymphonyMappingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FC6B6E1D169612C0006B4688 /* SymphonyMappingKit.framework */; };
 		FC6B6E41169612C0006B4688 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = FC6B6E3F169612C0006B4688 /* InfoPlist.strings */; };
@@ -188,8 +188,8 @@
 		FC6B6E28169612C0006B4688 /* SymphonyMappingKit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SymphonyMappingKit-Info.plist"; sourceTree = "<group>"; };
 		FC6B6E2A169612C0006B4688 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		FC6B6E2C169612C0006B4688 /* SymphonyMappingKit-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SymphonyMappingKit-Prefix.pch"; sourceTree = "<group>"; };
-		FC6B6E35169612C0006B4688 /* SymphonyMappingKitTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SymphonyMappingKitTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
-		FC6B6E36169612C0006B4688 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		FC6B6E35169612C0006B4688 /* SymphonyMappingKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SymphonyMappingKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FC6B6E36169612C0006B4688 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		FC6B6E3E169612C0006B4688 /* SymphonyMappingKitTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SymphonyMappingKitTests-Info.plist"; sourceTree = "<group>"; };
 		FC6B6E40169612C0006B4688 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		FC6B6E4D16961335006B4688 /* SMKExperimentMapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SMKExperimentMapper.h; path = Behavioral/SMKExperimentMapper.h; sourceTree = "<group>"; };
@@ -237,7 +237,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FCAADD5816C32F49003341CD /* AUIModel.framework in Frameworks */,
-				FC6B6E37169612C0006B4688 /* SenTestingKit.framework in Frameworks */,
+				FC6B6E37169612C0006B4688 /* XCTest.framework in Frameworks */,
 				FC6B6E38169612C0006B4688 /* Cocoa.framework in Frameworks */,
 				FC6B6E3B169612C0006B4688 /* SymphonyMappingKit.framework in Frameworks */,
 			);
@@ -303,7 +303,7 @@
 			isa = PBXGroup;
 			children = (
 				FC6B6E1D169612C0006B4688 /* SymphonyMappingKit.framework */,
-				FC6B6E35169612C0006B4688 /* SymphonyMappingKitTests.octest */,
+				FC6B6E35169612C0006B4688 /* SymphonyMappingKitTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -316,7 +316,7 @@
 				FC0F4E291696719600B9EA5C /* BWKit.framework */,
 				FC0F4E2A1696719600B9EA5C /* DAQFramework.framework */,
 				FC6B6E20169612C0006B4688 /* Cocoa.framework */,
-				FC6B6E36169612C0006B4688 /* SenTestingKit.framework */,
+				FC6B6E36169612C0006B4688 /* XCTest.framework */,
 				FC6B6E22169612C0006B4688 /* Other Frameworks */,
 			);
 			name = Frameworks;
@@ -539,8 +539,8 @@
 			);
 			name = SymphonyMappingKitTests;
 			productName = SymphonyMappingKitTests;
-			productReference = FC6B6E35169612C0006B4688 /* SymphonyMappingKitTests.octest */;
-			productType = "com.apple.product-type.bundle.ocunit-test";
+			productReference = FC6B6E35169612C0006B4688 /* SymphonyMappingKitTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -548,11 +548,11 @@
 		FC6B6E13169612C0006B4688 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0450;
+				LastUpgradeCheck = 1500;
 				ORGANIZATIONNAME = "Rieke Lab";
 			};
 			buildConfigurationList = FC6B6E16169612C0006B4688 /* Build configuration list for PBXProject "SymphonyMappingKit" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -601,7 +601,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+			shellScript = "";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -698,16 +698,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_ENABLE_OBJC_GC = unsupported;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -718,10 +718,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
-				OBJC_DISABLE_GC = Yes;
-				SDKROOT = macosx10.6;
-				VALID_ARCHS = i386;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -729,24 +727,22 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_ENABLE_OBJC_GC = unsupported;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
-				OBJC_DISABLE_GC = Yes;
-				SDKROOT = macosx10.6;
-				VALID_ARCHS = i386;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -803,7 +799,7 @@
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+					"$(inherited)",
 					"\"$(SRCROOT)/../Libraries\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -817,7 +813,7 @@
 					"-lz",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = octest;
+				WRAPPER_EXTENSION = xctest;
 			};
 			name = Debug;
 		};
@@ -826,7 +822,7 @@
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+					"$(inherited)",
 					"\"$(SRCROOT)/../Libraries\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -840,7 +836,7 @@
 					"-lz",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = octest;
+				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;
 		};

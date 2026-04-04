@@ -39,7 +39,7 @@
     for (MACHdf5LinkInformation *deviceMember in deviceMembers) {
         [devicePaths addObject:deviceMember.path];
     }
-    experiment.deviceEnumerator = [[[SMKDeviceEnumerator alloc] initWithReader:_reader entityPaths:devicePaths] autorelease];
+    experiment.deviceEnumerator = [[SMKDeviceEnumerator alloc] initWithReader:_reader entityPaths:devicePaths];
     
     // Sources
     NSArray *sourceMembers = [_reader groupMemberLinkInfoInPath:[path stringByAppendingString:@"/sources"]];
@@ -47,7 +47,7 @@
     for (MACHdf5LinkInformation *sourceMember in sourceMembers) {
         [sourcePaths addObject:sourceMember.path];
     }
-    experiment.sourceEnumerator = [[[SMKSourceEnumerator alloc] initWithReader:_reader entityPaths:sourcePaths] autorelease];
+    experiment.sourceEnumerator = [[SMKSourceEnumerator alloc] initWithReader:_reader entityPaths:sourcePaths];
     
     // Epoch Groups
     NSArray *groupMembers = [_reader groupMemberLinkInfoInPath:[path stringByAppendingString:@"/epochGroups"]];
@@ -55,7 +55,7 @@
     for (MACHdf5LinkInformation *groupMember in groupMembers) {
         [groupPaths addObject:groupMember.path];
     }
-    experiment.epochGroupEnumerator = [[[SMKEpochGroupEnumerator alloc] initWithReader:_reader entityPaths:groupPaths parent:nil] autorelease];
+    experiment.epochGroupEnumerator = [[SMKEpochGroupEnumerator alloc] initWithReader:_reader entityPaths:groupPaths parent:nil];
 }
 
 @end

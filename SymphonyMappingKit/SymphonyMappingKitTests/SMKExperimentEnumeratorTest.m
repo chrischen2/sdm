@@ -31,7 +31,7 @@
     
     NSString *experiment = @"/experiment-ed6102df-f6c0-4ce0-81d9-4dae15dbe468";
     
-    _enumerator = [[[SMKExperimentEnumerator alloc] initWithReader:reader entityPaths:[NSArray arrayWithObjects:experiment, nil]] autorelease];
+    _enumerator = [[SMKExperimentEnumerator alloc] initWithReader:reader entityPaths:[NSArray arrayWithObjects:experiment, nil]];
 }
 
 - (void)testNextObject
@@ -40,41 +40,41 @@
     while ([_enumerator nextObject]) {
         i++;
     }
-    STAssertTrue(i == 1, nil);
+    XCTAssertTrue(i == 1);
 }
 
 - (void)testUuid
 {
     SMKExperiment *experiment = [_enumerator nextObject];
     
-    STAssertTrue([experiment.uuid isEqualToString:@"ed6102df-f6c0-4ce0-81d9-4dae15dbe468"], nil);
+    XCTAssertTrue([experiment.uuid isEqualToString:@"ed6102df-f6c0-4ce0-81d9-4dae15dbe468"]);
 }
 
 - (void)testPurpose
 {
     SMKExperiment *experiment = [_enumerator nextObject];
     
-    STAssertTrue([experiment.purpose isEqualToString:@"my purpose here"], nil);
+    XCTAssertTrue([experiment.purpose isEqualToString:@"my purpose here"]);
 }
 
 - (void)testStartTime
 {
     SMKExperiment *experiment = [_enumerator nextObject];
     
-    NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss Z"];
-    
-    STAssertTrue([[dateFormatter stringFromDate:experiment.startTime] isEqualToString:@"2016-03-16 13:19:19 -0700"], nil);
+
+    XCTAssertTrue([[dateFormatter stringFromDate:experiment.startTime] isEqualToString:@"2016-03-16 13:19:19 -0700"]);
 }
 
 - (void)testEndTime
 {
     SMKExperiment *experiment = [_enumerator nextObject];
-    
-    NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
+
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss Z"];
     
-    STAssertTrue([[dateFormatter stringFromDate:experiment.endTime] isEqualToString:@"2016-03-16 13:25:39 -0700"], nil);
+    XCTAssertTrue([[dateFormatter stringFromDate:experiment.endTime] isEqualToString:@"2016-03-16 13:25:39 -0700"]);
 }
 
 - (void)testProperties
@@ -88,35 +88,35 @@
                               @"Rieke lab", @"lab",
                               nil];
     
-    STAssertTrue([experiment.properties isEqualToDictionary:expected], nil);
+    XCTAssertTrue([experiment.properties isEqualToDictionary:expected]);
 }
 
 - (void)testNotes
 {
     SMKExperiment *experiment = [_enumerator nextObject];
     
-    SMKNote *note1 = [[SMKNote new] autorelease];
+    SMKNote *note1 = [SMKNote new];
     note1.timestamp = [NSDate date];
     note1.comment = @"one note here";
     
-    SMKNote *note2 = [[SMKNote new] autorelease];
+    SMKNote *note2 = [SMKNote new];
     note2.timestamp = [NSDate date];
     note2.comment = @"and then comes another note";
     
-    SMKNote *note3 = [[SMKNote new] autorelease];
+    SMKNote *note3 = [SMKNote new];
     note3.timestamp = [NSDate date];
     note3.comment = @"these are experiment notes";
     
     NSSet *expected = [NSSet setWithObjects:note1, note2, note3, nil];
     
-    //STAssertTrue([experiment.notes isEqualToSet:expected], nil);
+    //XCTAssertTrue([experiment.notes isEqualToSet:expected]);
 }
 
 - (void)testKeywords
 {
     SMKExperiment *experiment = [_enumerator nextObject];
     
-    STAssertTrue([experiment.keywords count] == 0, nil);
+    XCTAssertTrue([experiment.keywords count] == 0);
 }
 
 - (void)testDeviceEnumerator
@@ -129,7 +129,7 @@
     while ([deviceEnumerator nextObject]) {
         i++;
     }
-    STAssertTrue(i == 6, nil);
+    XCTAssertTrue(i == 6);
 }
 
 - (void)testSourceEnumerator
@@ -142,7 +142,7 @@
     while ([sourceEnumerator nextObject]) {
         i++;
     }
-    STAssertTrue(i == 1, nil);
+    XCTAssertTrue(i == 1);
 }
 
 - (void)testEpochGroupEnumerator
@@ -155,7 +155,7 @@
     while ([groupEnumerator nextObject]) {
         i++;
     }
-    STAssertTrue(i == 2, nil);
+    XCTAssertTrue(i == 2);
 }
 
 @end

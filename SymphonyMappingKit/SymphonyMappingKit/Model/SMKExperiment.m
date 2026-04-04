@@ -15,14 +15,4 @@
 @synthesize sourceEnumerator = _sourceEnumerator;
 @synthesize epochGroupEnumerator = _epochGroupEnumerator;
 
-- (void)dealloc
-{
-    [_purpose release];
-    [_deviceEnumerator release];
-    [_sourceEnumerator release];
-    [_epochGroupEnumerator release];
-    
-    [super dealloc];
-}
-
 @end

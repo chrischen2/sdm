@@ -19,8 +19,8 @@
 {
     self = [super init];
     if (self) {
-        _reader = [reader retain];
-        _paths = [paths retain];
+        _reader = reader;
+        _paths = paths;
         _index = 0;
     }
     return self;
@@ -28,12 +28,6 @@
 
 - (id)nextObject
 {
-    // Release the last returned entity
-    if (_lastEntity != nil) {
-        [_lastEntity release];
-        _lastEntity = nil;
-    }
-    
     if (_index >= [_paths count]) {
         return nil;
     }
@@ -116,7 +110,6 @@
             note.comment = [NSString stringWithUTF8String:data[i].text];
             
             [notes addObject:note];
-            [note release];
         }
         entity.notes = notes;
         
@@ -136,17 +129,6 @@
 {
     SMKEntityEnumerator *another = [[SMKEntityEnumerator alloc] initWithReader:_reader entityPaths:_paths];
     return another;
-}
-
-- (void)dealloc
-{
-    [_reader release];
-    [_paths release];
-    if (_lastEntity != nil) {
-        [_lastEntity release];
-    }
-    
-    [super dealloc];
 }
 
 @end

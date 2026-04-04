@@ -38,11 +38,4 @@
     return [_path isEqualToString:object.path] && _type == object.type;
 }
 
-- (void)dealloc
-{
-    [_path release];
-    
-    [super dealloc];
-}
-
 @end

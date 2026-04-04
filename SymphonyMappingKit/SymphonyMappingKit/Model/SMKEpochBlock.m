@@ -15,14 +15,4 @@
 @synthesize protocolParameters = _protocolParameters;
 @synthesize epochEnumerator = _epochEnumerator;
 
-- (void)dealloc
-{
-    [_epochGroup release];
-    [_protocolId release];
-    [_protocolParameters release];
-    [_epochEnumerator release];
-    
-    [super dealloc];
-}
-
 @end

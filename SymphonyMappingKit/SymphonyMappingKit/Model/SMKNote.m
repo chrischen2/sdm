@@ -23,12 +23,4 @@
     return [[_timestamp description] stringByAppendingString:_comment];
 }
 
-- (void)dealloc
-{
-    [_comment release];
-    [_timestamp release];
-    
-    [super dealloc];
-}
-
 @end

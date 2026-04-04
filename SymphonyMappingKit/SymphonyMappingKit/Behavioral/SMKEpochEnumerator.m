@@ -40,7 +40,7 @@
     for (MACHdf5LinkInformation *backgroundMember in backgroundMembers) {
         [backgroundPaths addObject:backgroundMember.path];
     }
-    SMKBackgroundEnumerator *backgroundEnumerator = [[[SMKBackgroundEnumerator alloc] initWithReader:_reader entityPaths:backgroundPaths] autorelease];
+    SMKBackgroundEnumerator *backgroundEnumerator = [[SMKBackgroundEnumerator alloc] initWithReader:_reader entityPaths:backgroundPaths];
     NSMutableArray *backgrounds = [NSMutableArray arrayWithCapacity:[backgroundMembers count]];
     SMKBackground *background;
     while (background = [backgroundEnumerator nextObject]) {
@@ -54,7 +54,7 @@
     for (MACHdf5LinkInformation *stimulusMember in stimulusMembers) {
         [stimulusPaths addObject:stimulusMember.path];
     }
-    SMKStimulusEnumerator *stimulusEnumerator = [[[SMKStimulusEnumerator alloc] initWithReader:_reader entityPaths:stimulusPaths] autorelease];
+    SMKStimulusEnumerator *stimulusEnumerator = [[SMKStimulusEnumerator alloc] initWithReader:_reader entityPaths:stimulusPaths];
     NSMutableArray *stimuli = [NSMutableArray arrayWithCapacity:[stimulusMembers count]];
     SMKStimulus *stimulus;
     while (stimulus = [stimulusEnumerator nextObject]) {
@@ -68,7 +68,7 @@
     for (MACHdf5LinkInformation *responseMember in responseMembers) {
         [responsePaths addObject:responseMember.path];
     }
-    SMKResponseEnumerator *responseEnumerator = [[[SMKResponseEnumerator alloc] initWithReader:_reader entityPaths:responsePaths] autorelease];
+    SMKResponseEnumerator *responseEnumerator = [[SMKResponseEnumerator alloc] initWithReader:_reader entityPaths:responsePaths];
     NSMutableArray *responses = [NSMutableArray arrayWithCapacity:[responseMembers count]];
     SMKResponse *response;
     while (response = [responseEnumerator nextObject]) {

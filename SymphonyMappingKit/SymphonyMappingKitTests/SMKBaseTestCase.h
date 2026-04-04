@@ -6,14 +6,14 @@
 //  Copyright (c) 2013 Rieke Lab. All rights reserved.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+@import XCTest;
 
 #define d(n) [NSNumber numberWithDouble:n]
 #define ll(n) [NSNumber numberWithLongLong:n]
 #define i(n) [NSNumber numberWithInt:n]
 #define f(n) [NSNumber numberWithFloat:n]
 
-@interface SMKBaseTestCase : SenTestCase {
+@interface SMKBaseTestCase : XCTestCase {
     NSString *_resourcePath;
 }
 

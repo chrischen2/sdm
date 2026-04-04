@@ -18,15 +18,4 @@
 @synthesize epochGroupEnumerator = _epochGroupEnumerator;
 @synthesize epochBlockEnumerator = _epochBlockEnumerator;
 
-- (void)dealloc
-{
-    [_parent release];
-    [_label release];
-    [_source release];
-    [_epochGroupEnumerator release];
-    [_epochBlockEnumerator release];
-    
-    [super dealloc];
-}
-
 @end

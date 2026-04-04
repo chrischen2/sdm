@@ -23,11 +23,11 @@
     NSArray *members = [_reader allGroupMembersInPath:path];
     
     NSString *devicePath = [path stringByAppendingString:@"/device"];
-    SMKDeviceEnumerator *deviceEnumerator = [[[SMKDeviceEnumerator alloc] initWithReader:_reader entityPaths:[NSArray arrayWithObjects:devicePath, nil]] autorelease];
+    SMKDeviceEnumerator *deviceEnumerator = [[SMKDeviceEnumerator alloc] initWithReader:_reader entityPaths:[NSArray arrayWithObjects:devicePath, nil]];
     iobase.device = deviceEnumerator.nextObject;
     
     // Read device parameters
-    NSNumberFormatter *numFormatter = [[NSNumberFormatter new] autorelease];
+    NSNumberFormatter *numFormatter = [NSNumberFormatter new];
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     
     if ([members containsObject:@"dataConfigurationSpans"]) {

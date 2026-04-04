@@ -34,7 +34,7 @@
         count++;
     }
     
-    STAssertTrue(count == 1, nil);
+    XCTAssertTrue(count == 1);
 }
 
 @end

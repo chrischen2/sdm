@@ -16,13 +16,4 @@
 @synthesize channelNumber = _channelNumber;
 @synthesize streamType = _streamType;
 
-- (void)dealloc
-{
-    [_device release];
-    [_deviceParameters release];
-    [_channelNumber release];
-    
-    [super dealloc];
-}
-
 @end

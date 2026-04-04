@@ -13,12 +13,4 @@
 @synthesize startTime = _startTime;
 @synthesize endTime = _endTime;
 
-- (void)dealloc
-{
-    [_startTime release];
-    [_endTime release];
-    
-    [super dealloc];
-}
-
 @end

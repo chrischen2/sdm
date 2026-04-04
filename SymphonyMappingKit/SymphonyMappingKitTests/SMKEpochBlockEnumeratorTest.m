@@ -28,14 +28,14 @@
     
     NSString *group = @"/experiment-ed6102df-f6c0-4ce0-81d9-4dae15dbe468/epochGroups/epochGroup-3a039d15-0d95-4b33-9deb-6ffe297aa880/epochBlocks/edu.washington.rieke.protocols.Ramp-a57e1a61-72b5-4e8c-a008-0199c7772384";
     
-    _enumerator = [[[SMKEpochBlockEnumerator alloc] initWithReader:reader entityPaths:[NSArray arrayWithObjects:group, nil]] autorelease];
+    _enumerator = [[SMKEpochBlockEnumerator alloc] initWithReader:reader entityPaths:[NSArray arrayWithObjects:group, nil]];
 }
 
 - (void)testProtocolId
 {
     SMKEpochBlock *block = [_enumerator nextObject];
     
-    STAssertTrue([block.protocolId isEqualToString:@"edu.washington.rieke.protocols.Ramp"], nil);
+    XCTAssertTrue([block.protocolId isEqualToString:@"edu.washington.rieke.protocols.Ramp"]);
 }
 
 - (void)testProtocolParameters
@@ -53,7 +53,7 @@
                               d(50.0), @"tailTime",
                               nil];
     
-    STAssertTrue([block.protocolParameters isEqualToDictionary:expected], nil);
+    XCTAssertTrue([block.protocolParameters isEqualToDictionary:expected]);
 }
 
 - (void)testEpochEnumerator
@@ -66,7 +66,7 @@
     while ([epochEnumerator nextObject]) {
         i++;
     }
-    STAssertTrue(i == 5, nil);
+    XCTAssertTrue(i == 5);
 }
 
 @end

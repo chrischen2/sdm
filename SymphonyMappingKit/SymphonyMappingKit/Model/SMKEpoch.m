@@ -15,14 +15,4 @@
 @synthesize stimuli = _stimuli;
 @synthesize responses = _responses;
 
-- (void)dealloc
-{
-    [_backgrounds release];
-    [_protocolParameters release];
-    [_stimuli release];
-    [_responses release];
-    
-    [super dealloc];
-}
-
 @end

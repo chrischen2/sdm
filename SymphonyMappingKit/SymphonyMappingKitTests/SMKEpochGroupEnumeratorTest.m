@@ -29,14 +29,14 @@
     
     NSString *group = @"/experiment-ed6102df-f6c0-4ce0-81d9-4dae15dbe468/epochGroups/epochGroup-3a039d15-0d95-4b33-9deb-6ffe297aa880";
     
-    _enumerator = [[[SMKEpochGroupEnumerator alloc] initWithReader:reader entityPaths:[NSArray arrayWithObjects:group, nil]] autorelease];
+    _enumerator = [[SMKEpochGroupEnumerator alloc] initWithReader:reader entityPaths:[NSArray arrayWithObjects:group, nil]];
 }
 
 - (void)testLabel
 {
     SMKEpochGroup *group = [_enumerator nextObject];
     
-    STAssertTrue([group.label isEqualToString:@"Drug"], nil);
+    XCTAssertTrue([group.label isEqualToString:@"Drug"]);
 }
 
 - (void)testSource
@@ -45,7 +45,7 @@
     
     SMKSource *source = group.source;
     
-    STAssertTrue([source.uuid isEqualToString:@"fcd15c51-a104-47e9-bae1-b98a180ce114"], nil);
+    XCTAssertTrue([source.uuid isEqualToString:@"fcd15c51-a104-47e9-bae1-b98a180ce114"]);
 }
 
 - (void)testEpochGroupEnumerator
@@ -58,7 +58,7 @@
     while ([groupEnumerator nextObject]) {
         i++;
     }
-    STAssertTrue(i == 1, nil);
+    XCTAssertTrue(i == 1);
 }
 
 - (void)testEpochBlockEnumerator
@@ -71,7 +71,7 @@
     while ([blockEnumerator nextObject]) {
         i++;
     }
-    STAssertTrue(i == 1, nil);
+    XCTAssertTrue(i == 1);
 }
 
 @end

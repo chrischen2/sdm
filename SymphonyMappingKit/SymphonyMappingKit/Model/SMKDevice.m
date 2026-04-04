@@ -13,12 +13,4 @@
 @synthesize name = _name;
 @synthesize manufacturer = _manufacturer;
 
-- (void)dealloc
-{
-    [_name release];
-    [_manufacturer release];
-    
-    [super dealloc];
-}
-
 @end

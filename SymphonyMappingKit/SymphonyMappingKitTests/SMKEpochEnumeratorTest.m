@@ -27,7 +27,7 @@
     
     NSString *epoch = @"/experiment-ed6102df-f6c0-4ce0-81d9-4dae15dbe468/epochGroups/epochGroup-3a039d15-0d95-4b33-9deb-6ffe297aa880/epochBlocks/edu.washington.rieke.protocols.Ramp-a57e1a61-72b5-4e8c-a008-0199c7772384/epochs/epoch-49ad6fe8-4745-4c55-833e-15c9b927c60e";
     
-    _enumerator = [[[SMKEpochEnumerator alloc] initWithReader:reader entityPaths:[NSArray arrayWithObjects:epoch, nil]] autorelease];
+    _enumerator = [[SMKEpochEnumerator alloc] initWithReader:reader entityPaths:[NSArray arrayWithObjects:epoch, nil]];
 }
 
 - (void)testProtocolParameters
@@ -38,28 +38,28 @@
                               d(0.0), @"bathTemperature",
                               nil];
     
-    STAssertTrue([epoch.protocolParameters isEqualToDictionary:expected], nil);
+    XCTAssertTrue([epoch.protocolParameters isEqualToDictionary:expected]);
 }
 
 - (void)testBackgrounds
 {
     SMKEpoch *epoch = [_enumerator nextObject];
     
-    STAssertTrue([epoch.backgrounds count] == 5, nil);
+    XCTAssertTrue([epoch.backgrounds count] == 5);
 }
 
 - (void)testStimuli
 {
     SMKEpoch *epoch = [_enumerator nextObject];
     
-    STAssertTrue([epoch.stimuli count] == 1, nil);
+    XCTAssertTrue([epoch.stimuli count] == 1);
 }
 
 - (void)testResponses
 {
     SMKEpoch *epoch = [_enumerator nextObject];
     
-    STAssertTrue([epoch.responses count] == 1, nil);
+    XCTAssertTrue([epoch.responses count] == 1);
 }
 
 

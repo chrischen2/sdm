@@ -29,7 +29,7 @@
     
     if ([members containsObject:@"parent"]) {
         NSString *sourcePath = [path stringByAppendingString:@"/parent"];
-        SMKSourceEnumerator *sourceEnumerator = [[[SMKSourceEnumerator alloc] initWithReader:_reader entityPaths:[NSArray arrayWithObjects:sourcePath, nil]] autorelease];
+        SMKSourceEnumerator *sourceEnumerator = [[SMKSourceEnumerator alloc] initWithReader:_reader entityPaths:[NSArray arrayWithObjects:sourcePath, nil]];
         source.parent = sourceEnumerator.nextObject;
     } else {
         source.parent = nil;
@@ -43,7 +43,7 @@
     for (MACHdf5LinkInformation *sourceMember in sourceMembers) {
         [sourcePaths addObject:sourceMember.path];
     }
-    source.sourceEnumerator = [[[SMKSourceEnumerator alloc] initWithReader:_reader entityPaths:sourcePaths] autorelease];
+    source.sourceEnumerator = [[SMKSourceEnumerator alloc] initWithReader:_reader entityPaths:sourcePaths];
 }
 
 @end

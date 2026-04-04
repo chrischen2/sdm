@@ -27,21 +27,21 @@
     
     NSString *device = @"/experiment-ed6102df-f6c0-4ce0-81d9-4dae15dbe468/devices/Amp1-d7dc0f73-a246-41ea-aa1d-9c752e5ce572";
     
-    _enumerator = [[[SMKDeviceEnumerator alloc] initWithReader:reader entityPaths:[NSArray arrayWithObjects:device, nil]] autorelease];
+    _enumerator = [[SMKDeviceEnumerator alloc] initWithReader:reader entityPaths:[NSArray arrayWithObjects:device, nil]];
 }
 
 - (void)testName
 {
     SMKDevice *device = [_enumerator nextObject];
     
-    STAssertTrue([device.name isEqualToString:@"Amp1"], nil);
+    XCTAssertTrue([device.name isEqualToString:@"Amp1"]);
 }
 
 - (void)testManufacturer
 {
     SMKDevice *device = [_enumerator nextObject];
     
-    STAssertTrue([device.manufacturer isEqualToString:@"Molecular Devices"], nil);
+    XCTAssertTrue([device.manufacturer isEqualToString:@"Molecular Devices"]);
 }
 
 @end

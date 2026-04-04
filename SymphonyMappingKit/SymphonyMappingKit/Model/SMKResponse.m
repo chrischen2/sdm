@@ -16,15 +16,4 @@
 @synthesize sampleRateUnits = _sampleRateUnits;
 @synthesize inputTime = _inputTime;
 
-- (void)dealloc
-{
-    [_data release];
-    [_units release];
-    [_sampleRate release];
-    [_sampleRateUnits release];
-    [_inputTime release];
-    
-    [super dealloc];
-}
-
 @end

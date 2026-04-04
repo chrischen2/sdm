@@ -26,15 +26,14 @@
     
     NSBundle *modelBundle = [NSBundle bundleForClass:[Experiment class]];
     NSManagedObjectModel *objectModel = [NSManagedObjectModel mergedModelFromBundles:[NSArray arrayWithObject:modelBundle]];
-    NSPersistentStoreCoordinator *coordinator = [[NSPersistentStoreCoordinator alloc] autorelease];
-    [coordinator initWithManagedObjectModel:objectModel];
+    NSPersistentStoreCoordinator *coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:objectModel];
     [coordinator addPersistentStoreWithType:NSInMemoryStoreType
                               configuration:nil
                                         URL:nil
                                     options:nil
                                       error:nil];
     
-    _context = [[NSManagedObjectContext new] autorelease];
+    _context = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
     [_context setPersistentStoreCoordinator:coordinator];
     
     NSString *dataFile = [self pathForResource:@"2016-03-16.h5"];
@@ -61,7 +60,7 @@
     NSEntityDescription *description = [NSEntityDescription entityForName:@"Epoch"
                                                    inManagedObjectContext:_context];
     
-    NSFetchRequest *request = [[NSFetchRequest new] autorelease];
+    NSFetchRequest *request = [NSFetchRequest new];
     request.entity = description;
     
     NSDate *dotNetRefDate = [NSDate dateWithString:@"0001-01-01 00:00:00 +0000"];
@@ -81,8 +80,8 @@
     double test = 50.0;
     [data getBytes:&test length:sizeof(double)];
     
-    STAssertTrue(test == 0.0, nil);
-    STAssertTrue(data.length == 48000, nil);
+    XCTAssertTrue(test == 0.0);
+    XCTAssertTrue(data.length == 48000);
 }
 
 @end

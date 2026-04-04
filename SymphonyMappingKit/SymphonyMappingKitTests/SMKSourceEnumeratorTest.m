@@ -27,14 +27,14 @@
     
     NSString *source = @"/experiment-ed6102df-f6c0-4ce0-81d9-4dae15dbe468/sources/source-8de715a4-60f0-4dc3-baae-371e9ab93858";
     
-    _enumerator = [[[SMKSourceEnumerator alloc] initWithReader:reader entityPaths:[NSArray arrayWithObjects:source, nil]] autorelease];
+    _enumerator = [[SMKSourceEnumerator alloc] initWithReader:reader entityPaths:[NSArray arrayWithObjects:source, nil]];
 }
 
 - (void)testLabel
 {
     SMKSource *source = [_enumerator nextObject];
     
-    STAssertTrue([source.label isEqualToString:@"Mouse"], nil);
+    XCTAssertTrue([source.label isEqualToString:@"Mouse"]);
 }
 
 - (void)testSourceEnumerator
@@ -47,7 +47,7 @@
     while ([sourceEnumerator nextObject]) {
         i++;
     }
-    STAssertTrue(i == 1, nil);
+    XCTAssertTrue(i == 1);
 }
 
 - (void)testProperties
@@ -64,7 +64,7 @@
                               @"heavy", @"weight",
                               nil];
     
-    STAssertTrue([source.properties isEqualToDictionary:expected], nil);
+    XCTAssertTrue([source.properties isEqualToDictionary:expected]);
 }
 
 @end
