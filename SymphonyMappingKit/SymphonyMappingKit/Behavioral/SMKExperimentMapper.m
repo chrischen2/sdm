@@ -90,22 +90,16 @@
     
     [self assertValid:auiExperiment];
     
-    // Setup HDF5 output file for response
+    // Setup HDF5 output file for response.
+    //
+    // We write the response data ourselves (AUIModel's internal
+    // saveResponseDataToHDF5 hook no longer fires on modern Core Data), so
+    // create the HDF5 file *before* wiring up FileSystemResource/alias.
+    // Otherwise BWFileSystemResource's bookmark resolution sees a missing
+    // file and pops an NSOpenPanel during CLI runs.
     NSURL *dataFileUrl = [_auisqlUrl URLByAppendingPathExtension:@"h5"];
-    
-    [Experiment createResponseDataFileAtURL:dataFileUrl];
-    [auiExperiment useResponseDataFileAtURL:dataFileUrl];
-    [BWFileSystemResource setURL:dataFileUrl relativeToRootURL:_auisqlUrl forFileSystemResource:auiExperiment.responseDataFile];
-    auiExperiment.responseDataFile.alias = auiExperiment.responseDataFile.url;
-    
-    _hdf5FileUrl = dataFileUrl;
-
-    // Replace the (empty) file AUIModel created with one we write directly.
-    // AUIModel's internal saveResponseDataToHDF5 hook no longer fires on
-    // modern Core Data, so we write response datasets ourselves to preserve
-    // the expected layout: /<dataUUID> datasets of H5T_IEEE_F64LE with a
-    // scalar 'dtypeString' attribute "<f8".
     [[NSFileManager defaultManager] removeItemAtURL:dataFileUrl error:nil];
+    _hdf5FileUrl = dataFileUrl;
     // Force HDF5 1.6-compatible file format (superblock v0) so BWKit/Ovation
     // (linked against HDF5 1.6.9) can read the file. Two things are required:
     //   1. libver bounds = EARLIEST on the file access plist.
@@ -123,7 +117,13 @@
     if (_outH5FileId < 0) {
         [NSException raise:@"CannotCreateH5" format:@"Unable to create %@", [dataFileUrl path]];
     }
-    
+
+    // Now that the HDF5 file exists on disk, it's safe to wire up the
+    // FileSystemResource / alias without triggering an NSOpenPanel.
+    [auiExperiment useResponseDataFileAtURL:dataFileUrl];
+    [BWFileSystemResource setURL:dataFileUrl relativeToRootURL:_auisqlUrl forFileSystemResource:auiExperiment.responseDataFile];
+    auiExperiment.responseDataFile.alias = auiExperiment.responseDataFile.url;
+
     // Create a placeholder for the DAQ config so we can validate entities as they're created.
     // We'll create the real DAQ config after mapping all the entities.
     _daqConfigContainer = [NSEntityDescription insertNewObjectForEntityForName:@"DAQConfigContainer"
