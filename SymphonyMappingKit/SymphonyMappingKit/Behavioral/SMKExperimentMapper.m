@@ -100,31 +100,31 @@
     NSURL *dataFileUrl = [_auisqlUrl URLByAppendingPathExtension:@"h5"];
     [[NSFileManager defaultManager] removeItemAtURL:dataFileUrl error:nil];
     _hdf5FileUrl = dataFileUrl;
-    // Force HDF5 1.6-compatible file format (superblock v0) so BWKit/Ovation
-    // (linked against HDF5 1.6.9) can read the file. Two things are required:
-    //   1. libver bounds = EARLIEST on the file access plist.
-    //   2. file space strategy = AGGR (legacy) on the file creation plist.
-    //      HDF5 1.14's default is FSM_AGGR which forces superblock v2 and is
-    //      rejected by 1.6.9 with "bad superblock version number".
-    hid_t fcpl = H5Pcreate(H5P_FILE_CREATE);
-    H5Pset_file_space_strategy(fcpl, H5F_FSPACE_STRATEGY_AGGR, 0, (hsize_t)1);
+    // Create the HDF5 file. To produce a file readable by BWKit/Ovation
+    // (linked against HDF5 1.6.9 which only understands superblock v0/v1)
+    // SymphonyMappingKit MUST be linked against HDF5 1.10.x — later versions
+    // default to v2 superblocks and HDF5 2.x rejects LIBVER_EARLIEST.
+    // We try EARLIEST first and fall back if the library doesn't accept it,
+    // so the code still builds against newer HDF5 (even if the resulting
+    // file will not load in Ovation).
     hid_t fapl = H5Pcreate(H5P_FILE_ACCESS);
-    H5Pset_libver_bounds(fapl, H5F_LIBVER_EARLIEST, H5F_LIBVER_EARLIEST);
+    if (H5Pset_libver_bounds(fapl, H5F_LIBVER_EARLIEST, H5F_LIBVER_EARLIEST) < 0) {
+        (void)H5Pset_libver_bounds(fapl, H5F_LIBVER_V18, H5F_LIBVER_V18);
+    }
     _outH5FileId = H5Fcreate([[dataFileUrl path] UTF8String],
-                             H5F_ACC_TRUNC, fcpl, fapl);
+                             H5F_ACC_TRUNC, H5P_DEFAULT, fapl);
     H5Pclose(fapl);
-    H5Pclose(fcpl);
     if (_outH5FileId < 0) {
         [NSException raise:@"CannotCreateH5" format:@"Unable to create %@", [dataFileUrl path]];
     }
 
     // Now that the HDF5 file exists on disk, wire up the FileSystemResource
-    // so Ovation can locate the .auisql.h5 by relative path. We deliberately
-    // do NOT assign .alias: on modern macOS the BWAlias value transformer
-    // tries to resolve a bookmark during the setter and pops an NSOpenPanel
-    // if it can't, which breaks CLI runs.
+    // so Ovation can locate the .auisql.h5 by relative path. The file must
+    // exist before assigning .alias — otherwise BWAlias's bookmark setter
+    // fails to resolve and pops an NSOpenPanel during CLI runs.
     [auiExperiment useResponseDataFileAtURL:dataFileUrl];
     [BWFileSystemResource setURL:dataFileUrl relativeToRootURL:_auisqlUrl forFileSystemResource:auiExperiment.responseDataFile];
+    auiExperiment.responseDataFile.alias = auiExperiment.responseDataFile.url;
 
     // Create a placeholder for the DAQ config so we can validate entities as they're created.
     // We'll create the real DAQ config after mapping all the entities.
