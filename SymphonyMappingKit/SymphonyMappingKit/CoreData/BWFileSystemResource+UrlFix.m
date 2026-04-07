@@ -10,43 +10,35 @@
 
 @implementation BWFileSystemResource (UrlFix)
 
-// HACK: Should be modified directly in BWKit.
-+ (NSURL*)URLForFileSystemResource:(BWFileSystemResource*)resource relativeToRootURL:(NSURL*)relativeRoot openPanel:(NSOpenPanel*)op {
-    NSURL *result = nil;
-    
-    // FIXME: This was causing the BWFileSystemResource url method to return two different results when called in succession.
-    // The first was a filepath URL and the second was just a URL pointing to the file.
-//    if([resource relativeURL] != nil) {
-//        result = [NSURL URLWithString:[[[resource relativeURL] relativePath] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] relativeToURL:relativeRoot];
-//    }
-    
-    if ([resource relativeURL] != nil) {
-        result = [NSURL URLWithString:[[[resource relativeURL] relativePath] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] relativeToURL:relativeRoot];        
-        result = [NSURL fileURLWithPath:result.path];
+// HACK: Overrides BWKit's method of the same name. BWKit's implementation
+// pops an NSOpenPanel when it can't resolve a relative URL, which is wrong
+// for CLI use. This replacement resolves the relative URL against the root
+// using modern NSURL APIs and never shows UI.
++ (NSURL*)URLForFileSystemResource:(BWFileSystemResource*)resource
+                 relativeToRootURL:(NSURL*)relativeRoot
+                         openPanel:(NSOpenPanel*)op
+{
+    NSURL *relURL = [resource relativeURL];
+    if (relURL == nil) {
+        return nil;
     }
-    
-    if(![[NSFileManager defaultManager] fileExistsAtPath:[result path]]) { //relative-path failed. ask user to find the file
-        if(op == nil) {
-            op = [NSOpenPanel openPanel];
-        }
-        
-        [op setAllowsMultipleSelection:NO];
-        [op setCanChooseFiles:YES];
-        [op setCanChooseDirectories:YES];
-        [op setResolvesAliases:YES];
-        
-        if([resource relativeURL] != nil) {
-            [op setMessage:[NSString stringWithFormat:BWLocalizedString(@"Find %@"), [[[resource relativeURL] path] lastPathComponent]]];
-        }
-        
-        if([op runModal] == NSOKButton) {
-            result = [op URL];
-            BWLogDebug(@"Setting relative path from user-selected URL: %@", result);
-            [resource setRelativeURL:[NSURL fileURLWithPath:[[result path] pathRelativeToPath:[relativeRoot path]]]];
-            
-        }
+
+    // Resolve the relative path against the root URL, treating paths as
+    // literal file system paths (no URL percent-encoding games).
+    NSString *relPath = [relURL relativePath];
+    if (relPath == nil || [relPath length] == 0) {
+        return nil;
     }
-    
+
+    NSURL *result;
+    if ([relPath isAbsolutePath]) {
+        result = [NSURL fileURLWithPath:relPath];
+    } else {
+        NSString *rootPath = [relativeRoot path];
+        NSString *fullPath = [rootPath stringByAppendingPathComponent:relPath];
+        result = [NSURL fileURLWithPath:fullPath];
+    }
+
     return result;
 }
 
