@@ -78,7 +78,7 @@
         
         // Get member object info
         H5O_info_t objectInfo;
-        H5Oget_info_by_name(groupId, name, &objectInfo, H5P_DEFAULT);
+        H5Oget_info_by_name(groupId, name, &objectInfo, H5O_INFO_BASIC, H5P_DEFAULT);
         
         NSString *path = [superGroupName stringByAppendingString:cStringToString(name)];
         MACHdf5LinkInformation *linkInfo = [[MACHdf5LinkInformation alloc] initWithPath:path objectType:objectInfo.type];
@@ -96,7 +96,7 @@
     hid_t objectId = H5Oopen(_fileId, stringToCString(objectPath), H5P_DEFAULT);
 
     H5O_info_t info;
-    H5Oget_info(objectId, &info);
+    H5Oget_info(objectId, &info, H5O_INFO_ALL);
     
     NSMutableArray *names = [NSMutableArray arrayWithCapacity:(uint)info.num_attrs];
     for (int i = 0; i < info.num_attrs; i++) {
@@ -122,7 +122,7 @@
     hid_t objectId = H5Oopen(_fileId, stringToCString(objectPath), H5P_DEFAULT);
     
     H5O_info_t info;
-    H5Oget_info_by_name(objectId, stringToCString(objectPath), &info, H5P_DEFAULT);
+    H5Oget_info_by_name(objectId, stringToCString(objectPath), &info, H5O_INFO_BASIC, H5P_DEFAULT);
     
     MACHdf5ObjectInformation *objectInfo = [[MACHdf5ObjectInformation alloc] initWithPath:objectPath objectType:info.type];
     
