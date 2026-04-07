@@ -56,6 +56,14 @@ int main(int argc, char *argv[])
                         NSLog(@"Couldn't remove existing AUISQL file: %@", error);
                         return 1;
                     }
+                    // Also remove stale SQLite WAL/SHM sidecars — leaving them
+                    // behind causes Core Data to hit SQLITE_IOERR (522) on open.
+                    for (NSString *suffix in @[@"-wal", @"-shm", @"-journal"]) {
+                        NSString *sidecar = [auisqlFilePath stringByAppendingString:suffix];
+                        if ([fileManager fileExistsAtPath:sidecar]) {
+                            [fileManager removeItemAtPath:sidecar error:NULL];
+                        }
+                    }
 
                     if ([fileManager fileExistsAtPath:auisqlHdf5FilePath]) {
                         if ([fileManager removeItemAtPath:auisqlHdf5FilePath error:&error] == NO) {
