@@ -118,11 +118,13 @@
         [NSException raise:@"CannotCreateH5" format:@"Unable to create %@", [dataFileUrl path]];
     }
 
-    // Now that the HDF5 file exists on disk, it's safe to wire up the
-    // FileSystemResource / alias without triggering an NSOpenPanel.
+    // Now that the HDF5 file exists on disk, wire up the FileSystemResource
+    // so Ovation can locate the .auisql.h5 by relative path. We deliberately
+    // do NOT assign .alias: on modern macOS the BWAlias value transformer
+    // tries to resolve a bookmark during the setter and pops an NSOpenPanel
+    // if it can't, which breaks CLI runs.
     [auiExperiment useResponseDataFileAtURL:dataFileUrl];
     [BWFileSystemResource setURL:dataFileUrl relativeToRootURL:_auisqlUrl forFileSystemResource:auiExperiment.responseDataFile];
-    auiExperiment.responseDataFile.alias = auiExperiment.responseDataFile.url;
 
     // Create a placeholder for the DAQ config so we can validate entities as they're created.
     // We'll create the real DAQ config after mapping all the entities.
