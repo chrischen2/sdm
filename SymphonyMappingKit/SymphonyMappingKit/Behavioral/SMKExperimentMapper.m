@@ -103,14 +103,12 @@
     // Create the HDF5 file. To produce a file readable by BWKit/Ovation
     // (linked against HDF5 1.6.9 which only understands superblock v0/v1)
     // SymphonyMappingKit MUST be linked against HDF5 1.10.x — later versions
-    // default to v2 superblocks and HDF5 2.x rejects LIBVER_EARLIEST.
-    // We try EARLIEST first and fall back if the library doesn't accept it,
-    // so the code still builds against newer HDF5 (even if the resulting
-    // file will not load in Ovation).
+    // default to v2 superblocks. We set libver bounds to (EARLIEST, V18) so
+    // HDF5 1.10 writes files using only features present in 1.8, which in
+    // practice produces a v0 superblock that HDF5 1.6.9 can read.
+    // HDF5 1.10 rejects (EARLIEST, EARLIEST); high bound must be >= V18.
     hid_t fapl = H5Pcreate(H5P_FILE_ACCESS);
-    if (H5Pset_libver_bounds(fapl, H5F_LIBVER_EARLIEST, H5F_LIBVER_EARLIEST) < 0) {
-        (void)H5Pset_libver_bounds(fapl, H5F_LIBVER_V18, H5F_LIBVER_V18);
-    }
+    H5Pset_libver_bounds(fapl, H5F_LIBVER_EARLIEST, H5F_LIBVER_V18);
     _outH5FileId = H5Fcreate([[dataFileUrl path] UTF8String],
                              H5F_ACC_TRUNC, H5P_DEFAULT, fapl);
     H5Pclose(fapl);
