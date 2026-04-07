@@ -42,17 +42,55 @@ Produces `experiment.auisql` and `experiment.auisql.h5` next to the source file.
 
 ## Verifying output against sdm2
 
-If you have files previously mapped with sdm2, you can confirm sdm3 produces
-equivalent output:
+If you have the same experiment previously mapped with sdm2, you can confirm
+that sdm3 produces an equivalent `.auisql` / `.auisql.h5` pair. The repo ships
+`tools/compare_auisql.py` for this.
 
+**One-time setup:**
 ```
-pip3 install h5py numpy
-python3 tools/compare_auisql.py old/file.auisql new/file.auisql
+pip3 install h5py numpy     # sqlite3 is stdlib
 ```
 
-The script compares SQLite schema, row counts, Experiment metadata, and every
-response dataset (shape, dtype, raw sample bytes). Responses are matched across
-files by `(epoch start, channel, type)` since UUIDs are regenerated each run.
+**Run the comparison** (pass just the `.auisql` path for each side — the
+script finds the matching `.auisql.h5` next to it automatically):
+```
+python3 tools/compare_auisql.py \
+    /path/to/sdm2_output/experiment.auisql \
+    /path/to/sdm3_output/experiment.auisql
+```
+
+Example output for a matching pair:
+```
+=== SQLite row counts ===
+[OK] ZEXPERIMENT: old=1 new=1
+[OK] ZEPOCH: old=1594 new=1594
+[OK] ZIOBASE: old=3188 new=3188
+...
+=== HDF5 response data ===
+[OK] response count: old=1594 new=1594
+[OK] shape match: 1594/1594
+[OK] dtype match: 1594/1594
+[OK] sample data match (tol=0.0): 1594/1594
+========================
+ failures: 0
+ warnings: 0
+========================
+```
+
+What it checks:
+- SQLite schema presence and row counts for Experiment/Cell/Epoch/IOBase/etc.
+- Experiment metadata fields (start date, DAQ ID, purpose, notes)
+- Every response dataset in the companion `.auisql.h5`: shape, dtype,
+  `dtypeString` attribute, and raw sample bytes
+
+Responses are matched across files by `(epoch start, channel, type)` rather
+than UUID, since UUIDs are regenerated on every run and will never match.
+
+Options:
+- `--tol 1e-12` — allow a floating-point tolerance instead of exact byte match
+- `--sample 100` — only spot-check a random subset of responses (faster)
+
+A non-zero exit code indicates at least one mismatch.
 
 ## Requirements
 
