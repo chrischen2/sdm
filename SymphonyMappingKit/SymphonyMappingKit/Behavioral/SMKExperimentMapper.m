@@ -31,6 +31,7 @@
 #import <DAQFramework/AUINullExternalDevice.h>
 
 #import <BWKit/BWKit.h>
+#import <hdf5.h>
 
 @interface SMKExperimentMapper ()
 
