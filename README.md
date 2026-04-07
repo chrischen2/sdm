@@ -16,17 +16,42 @@ Two options:
 
 ### Option A — Prebuilt release (recommended)
 
-1. Download `SymphonyDataMapper3.app.zip` from the
-   [releases page](https://github.com/chrischen2/sdm/releases).
-2. Unzip and copy `SymphonyDataMapper.app` to `/Applications`.
-3. Remove the Gatekeeper quarantine flag:
+Requires an Intel x86_64 Mac running macOS 13 or later. Apple Silicon users
+must first install Rosetta 2: `softwareupdate --install-rosetta`.
+
+1. Go to the [releases page](https://github.com/chrischen2/sdm/releases/latest)
+   and download the latest `SymphonyDataMapper3-vX.Y.Z-macos-x86_64.zip` asset.
+
+   Or from Terminal (replace the version):
+   ```
+   cd ~/Downloads
+   curl -LO https://github.com/chrischen2/sdm/releases/download/v3.0.0/SymphonyDataMapper3-v3.0.0-macos-x86_64.zip
+   ```
+
+2. Unzip and move the app into `/Applications`:
+   ```
+   unzip SymphonyDataMapper3-v3.0.0-macos-x86_64.zip
+   sudo mv SymphonyDataMapper.app /Applications/
+   ```
+
+3. Remove the Gatekeeper quarantine flag (required — the build is ad-hoc
+   signed, so macOS will otherwise refuse to launch it):
    ```
    sudo xattr -dr com.apple.quarantine /Applications/SymphonyDataMapper.app
    ```
-4. Symlink the CLI as `sdm3`:
+
+4. Symlink the CLI as `sdm3` so you can run it from any directory:
    ```
    sudo ln -sf /Applications/SymphonyDataMapper.app/Contents/MacOS/SymphonyDataMapper /usr/local/bin/sdm3
    ```
+
+5. Verify it runs:
+   ```
+   sdm3
+   ```
+   You should see a usage message. If instead you get
+   "cannot be opened because the developer cannot be verified", step 3 was
+   skipped — run the `xattr` command and try again.
 
 ### Option B — Build from source
 
