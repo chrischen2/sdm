@@ -106,15 +106,20 @@
     // the expected layout: /<dataUUID> datasets of H5T_IEEE_F64LE with a
     // scalar 'dtypeString' attribute "<f8".
     [[NSFileManager defaultManager] removeItemAtURL:dataFileUrl error:nil];
-    // Force HDF5 1.6-compatible file format so BWKit/Ovation (linked against
-    // HDF5 1.6.9) can read the file. Without this, HDF5 1.14 writes object
-    // headers/superblocks that the legacy library cannot parse, and reads
-    // fail with "Error getting data set dimensions".
+    // Force HDF5 1.6-compatible file format (superblock v0) so BWKit/Ovation
+    // (linked against HDF5 1.6.9) can read the file. Two things are required:
+    //   1. libver bounds = EARLIEST on the file access plist.
+    //   2. file space strategy = AGGR (legacy) on the file creation plist.
+    //      HDF5 1.14's default is FSM_AGGR which forces superblock v2 and is
+    //      rejected by 1.6.9 with "bad superblock version number".
+    hid_t fcpl = H5Pcreate(H5P_FILE_CREATE);
+    H5Pset_file_space_strategy(fcpl, H5F_FSPACE_STRATEGY_AGGR, 0, (hsize_t)1);
     hid_t fapl = H5Pcreate(H5P_FILE_ACCESS);
     H5Pset_libver_bounds(fapl, H5F_LIBVER_EARLIEST, H5F_LIBVER_EARLIEST);
     _outH5FileId = H5Fcreate([[dataFileUrl path] UTF8String],
-                             H5F_ACC_TRUNC, H5P_DEFAULT, fapl);
+                             H5F_ACC_TRUNC, fcpl, fapl);
     H5Pclose(fapl);
+    H5Pclose(fcpl);
     if (_outH5FileId < 0) {
         [NSException raise:@"CannotCreateH5" format:@"Unable to create %@", [dataFileUrl path]];
     }
