@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+#import <hdf5.h>
 
 @class DAQConfigContainer;
 
@@ -18,6 +19,7 @@
     NSMutableSet *_streams;
     NSURL *_auisqlUrl;
     NSURL *_hdf5FileUrl;
+    hid_t _outH5FileId;
 }
 
 + (id)mapperForDataFilePath:(NSString *)dataFilePath

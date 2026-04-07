@@ -60,6 +60,7 @@
         _context = context;
         _auisqlUrl = auisqlUrl;
         _streams = [NSMutableSet set];
+        _outH5FileId = -1;
     }
     return self;
 }
@@ -97,6 +98,18 @@
     auiExperiment.responseDataFile.alias = auiExperiment.responseDataFile.url;
     
     _hdf5FileUrl = dataFileUrl;
+
+    // Replace the (empty) file AUIModel created with one we write directly.
+    // AUIModel's internal saveResponseDataToHDF5 hook no longer fires on
+    // modern Core Data, so we write response datasets ourselves to preserve
+    // the expected layout: /<dataUUID> datasets of H5T_IEEE_F64LE with a
+    // scalar 'dtypeString' attribute "<f8".
+    [[NSFileManager defaultManager] removeItemAtURL:dataFileUrl error:nil];
+    _outH5FileId = H5Fcreate([[dataFileUrl path] UTF8String],
+                             H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
+    if (_outH5FileId < 0) {
+        [NSException raise:@"CannotCreateH5" format:@"Unable to create %@", [dataFileUrl path]];
+    }
     
     // Create a placeholder for the DAQ config so we can validate entities as they're created.
     // We'll create the real DAQ config after mapping all the entities.
@@ -189,6 +202,39 @@
     if ([_context save:&error] == NO) {
         [NSException raise:@"Failed to save context" format:@"Failed to save context: %@", [error localizedDescription]];
     }
+
+    if (_outH5FileId >= 0) {
+        H5Fclose(_outH5FileId);
+        _outH5FileId = -1;
+    }
+}
+
+- (void)writeResponseData:(NSData *)data withUUID:(NSString *)uuid
+{
+    NSUInteger sampleCount = [data length] / sizeof(double);
+    hsize_t dims[1] = { (hsize_t)sampleCount };
+    hid_t space = H5Screate_simple(1, dims, NULL);
+    hid_t dset = H5Dcreate2(_outH5FileId, [uuid UTF8String],
+                            H5T_IEEE_F64LE, space,
+                            H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+    H5Dwrite(dset, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT, [data bytes]);
+
+    // dtypeString = "<f8" (numpy little-endian float64), stored as 4-byte
+    // null-terminated ASCII matching the legacy sdm2 file layout.
+    hid_t atype = H5Tcopy(H5T_C_S1);
+    H5Tset_size(atype, 4);
+    H5Tset_strpad(atype, H5T_STR_NULLTERM);
+    H5Tset_cset(atype, H5T_CSET_ASCII);
+    hid_t ascalar = H5Screate(H5S_SCALAR);
+    hid_t attr = H5Acreate2(dset, "dtypeString", atype, ascalar,
+                            H5P_DEFAULT, H5P_DEFAULT);
+    H5Awrite(attr, atype, "<f8");
+    H5Aclose(attr);
+    H5Sclose(ascalar);
+    H5Tclose(atype);
+
+    H5Dclose(dset);
+    H5Sclose(space);
 }
 
 - (void)mapSource:(SMKSource *)source toExperiment:(Experiment *)auiExperiment
@@ -431,8 +477,13 @@
             auiResponse.externalDeviceGain = [NSNumber numberWithInt:1];
             auiResponse.channelID = response.channelNumber;
             auiResponse.sampleBytes = [NSNumber numberWithInt:sizeof(double)];
-            auiResponse.data = response.data;
-            
+
+            // Bypass AUIModel's broken save-to-HDF5 hook: generate a UUID,
+            // store it on the Response, and write bytes directly to our h5.
+            NSString *uuid = [[NSUUID UUID] UUIDString];
+            auiResponse.dataUUID = uuid;
+            [self writeResponseData:response.data withUUID:uuid];
+
             auiResponse.epoch = auiEpoch;
             [self assertValid:auiResponse];
         }
