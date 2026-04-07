@@ -15,7 +15,7 @@
 
 - (id)initWithPath:(NSString *)path objectType:(H5O_type_t)type
 {
-    [super init];
+    self = [super init];
     if (self) {
         _path = [path copy];
         _type = type;
