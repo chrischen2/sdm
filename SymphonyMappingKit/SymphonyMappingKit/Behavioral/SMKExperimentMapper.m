@@ -117,12 +117,23 @@
     }
 
     // Now that the HDF5 file exists on disk, wire up the FileSystemResource
-    // so Ovation can locate the .auisql.h5 by relative path. The file must
-    // exist before assigning .alias — otherwise BWAlias's bookmark setter
-    // fails to resolve and pops an NSOpenPanel during CLI runs.
+    // so Ovation can locate the .auisql.h5 by relative path.
+    //
+    // We must NOT read back `responseDataFile.url` here: on modern macOS the
+    // BWKit getter resolves through BWAlias → BDAlias.fullPathRelativeToPath:,
+    // which relies on the legacy Carbon Alias Manager (AliasHandle/FSRef).
+    // Those APIs are stubs on current macOS and return nil, so the getter
+    // ends up calling [NSURL fileURLWithPath:nil] and throws
+    // "*** -[NSURL initFileURLWithPath:]: nil string parameter".
+    //
+    // Instead, pass the NSURL we already have to the `alias` setter directly.
+    // `alias` is an `id` transformable attribute; storing an NSURL there was
+    // already how the previous "alias is a required value" fix worked on
+    // macOS 10.13.3, and it keeps the Core Data validation happy without
+    // ever touching BWAlias/Carbon.
     [auiExperiment useResponseDataFileAtURL:dataFileUrl];
     [BWFileSystemResource setURL:dataFileUrl relativeToRootURL:_auisqlUrl forFileSystemResource:auiExperiment.responseDataFile];
-    auiExperiment.responseDataFile.alias = auiExperiment.responseDataFile.url;
+    auiExperiment.responseDataFile.alias = dataFileUrl;
 
     // Create a placeholder for the DAQ config so we can validate entities as they're created.
     // We'll create the real DAQ config after mapping all the entities.
