@@ -1,0 +1,4 @@
+Target dependency graph (2 targets)
+Target 'SymphonyDataMapper' in project 'SymphonyDataMapper'
+➜ Explicit dependency on target 'SymphonyMappingKit' in project 'SymphonyMappingKit'
+Target 'SymphonyMappingKit' in project 'SymphonyMappingKit' (no dependencies)

@@ -1,0 +1,8 @@
+---
+triple:          'x86_64-apple-darwin'
+binary-path:     '/Users/chrischen/Documents/GitHub/sdm/SymphonyDataMapper/build/Release/SymphonyDataMapper.app/Contents/MacOS/SymphonyDataMapper'
+relocations:
+  - { offset: 0x756A7, size: 0x8, addend: 0x0, symName: _usage, symObjAddr: 0x0, symBinAddr: 0x1000009D0, symSize: 0x17 }
+  - { offset: 0x756C5, size: 0x8, addend: 0x0, symName: _usage, symObjAddr: 0x0, symBinAddr: 0x1000009D0, symSize: 0x17 }
+  - { offset: 0x756EE, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x17, symBinAddr: 0x1000009E7, symSize: 0x7DF }
+...
