@@ -56,6 +56,9 @@
         [groupPaths addObject:groupMember.path];
     }
     experiment.epochGroupEnumerator = [[SMKEpochGroupEnumerator alloc] initWithReader:_reader entityPaths:groupPaths parent:nil];
+
+    NSLog(@"Experiment at '%@': %lu device(s), %lu source(s), %lu epochGroup(s)",
+          path, (unsigned long)[devicePaths count], (unsigned long)[sourcePaths count], (unsigned long)[groupPaths count]);
 }
 
 @end
