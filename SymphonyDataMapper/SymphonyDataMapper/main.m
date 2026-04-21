@@ -106,6 +106,7 @@ int main(int argc, char *argv[])
         }
         @catch (NSException *exception) {
             NSLog(@"Error: %@", exception);
+            return 3;
         }
     }
     return 0;
