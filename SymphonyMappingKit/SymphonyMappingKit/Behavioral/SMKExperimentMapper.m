@@ -62,6 +62,8 @@
         _auisqlUrl = auisqlUrl;
         _streams = [NSMutableSet set];
         _outH5FileId = -1;
+        _epochCount = 0;
+        _responseCount = 0;
     }
     return self;
 }
@@ -71,9 +73,13 @@
     SMKDataFileReader *reader = [SMKDataFileReader readerForHdf5FilePath:_dataFilePath];
     SMKExperimentEnumerator *experimentEnumerator = [reader experimentEnumerator];
     SMKExperiment *experiment;
+    int experimentCount = 0;
     while (experiment = [experimentEnumerator nextObject]) {
+        experimentCount++;
         [self mapExperiment:experiment];
     }
+    NSLog(@"Mapped %d experiment(s), %d epoch(s), %d response(s) written to HDF5",
+          experimentCount, _epochCount, _responseCount);
 }
 
 - (void)mapExperiment:(SMKExperiment *)experiment
@@ -236,6 +242,9 @@
 - (void)writeResponseData:(NSData *)data withUUID:(NSString *)uuid
 {
     NSUInteger sampleCount = [data length] / sizeof(double);
+    if (sampleCount == 0) {
+        NSLog(@"WARNING: Response %@ has 0 samples — empty data will not be visible in Ovation", uuid);
+    }
     hsize_t dims[1] = { (hsize_t)sampleCount };
     hid_t space = H5Screate_simple(1, dims, NULL);
     hid_t dset = H5Dcreate2(_outH5FileId, [uuid UTF8String],
@@ -422,7 +431,8 @@
         }
         
         auiEpoch.cell = auiCell;
-        
+        _epochCount++;
+
         // The sample rate is stored in the responses by Symphony and the stimuli by Acquirino
         // It should be consistent throughout all responses of the epoch.
         NSNumber *sampleRate = nil;
@@ -507,6 +517,7 @@
             NSString *uuid = [[NSUUID UUID] UUIDString];
             auiResponse.dataUUID = uuid;
             [self writeResponseData:response.data withUUID:uuid];
+            _responseCount++;
 
             auiResponse.epoch = auiEpoch;
             [self assertValid:auiResponse];

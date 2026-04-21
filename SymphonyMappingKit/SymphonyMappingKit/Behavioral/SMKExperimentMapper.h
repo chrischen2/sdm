@@ -19,6 +19,8 @@
     NSURL *_auisqlUrl;
     NSURL *_hdf5FileUrl;
     long long _outH5FileId;
+    int _epochCount;
+    int _responseCount;
 }
 
 + (id)mapperForDataFilePath:(NSString *)dataFilePath
