@@ -37,6 +37,12 @@
     // Data
     const char *dsetPath = [[path stringByAppendingString:@"/data"] cStringUsingEncoding:[NSString defaultCStringEncoding]];
     hid_t dsetId = H5Dopen(_reader.fileId, dsetPath, H5P_DEFAULT);
+    if (dsetId < 0) {
+        NSLog(@"WARNING: H5Dopen failed for response data at '%s' — dataset does not exist", dsetPath);
+        response.data = [NSData data];
+        response.units = @"";
+        return;
+    }
 
     // Get dataspace and allocate memory for read buffer
     hid_t spaceId = H5Dget_space(dsetId);
@@ -49,9 +55,17 @@
         [NSException raise:@"LengthTooLarge"
                     format:@"%s length is too large", dsetPath];
     }
-    
+
     // Read data
     hid_t datatypeId = H5Topen(_reader.fileId, "MEASUREMENT", H5P_DEFAULT);
+    if (datatypeId < 0) {
+        NSLog(@"WARNING: Named datatype 'MEASUREMENT' not found in HDF5 file — cannot read response at '%s'", dsetPath);
+        H5Sclose(spaceId);
+        H5Dclose(dsetId);
+        response.data = [NSData data];
+        response.units = @"";
+        return;
+    }
 
     measurementData *buffer = malloc(length * sizeof(measurementData));
     H5Dread(dsetId, datatypeId, H5S_ALL, H5S_ALL, H5P_DEFAULT, buffer);

@@ -47,6 +47,9 @@
         [epochPaths addObject:epochMember.path];
     }
     block.epochEnumerator = [[SMKEpochEnumerator alloc] initWithReader:_reader entityPaths:epochPaths];
+
+    NSLog(@"    EpochBlock '%@' at '%@': %lu epoch(s)",
+          block.protocolId, path, (unsigned long)[epochPaths count]);
 }
 
 @end

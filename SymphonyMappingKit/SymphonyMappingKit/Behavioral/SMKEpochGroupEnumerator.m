@@ -62,6 +62,9 @@
         [blockPaths addObject:blockMember.path];
     }
     group.epochBlockEnumerator = [[SMKEpochBlockEnumerator alloc] initWithReader:_reader entityPaths:blockPaths epochGroup:group];
+
+    NSLog(@"  EpochGroup '%@' at '%@': %lu sub-group(s), %lu epochBlock(s)",
+          group.label, path, (unsigned long)[groupPaths count], (unsigned long)[blockPaths count]);
 }
 
 @end

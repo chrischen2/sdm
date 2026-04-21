@@ -39,12 +39,20 @@
 - (NSArray *)allGroupMembersInPath:(NSString *)groupPath
 {
     hid_t groupId = H5Gopen(_fileId, stringToCString(groupPath), H5P_DEFAULT);
-    
+    if (groupId < 0) {
+        NSLog(@"WARNING: H5Gopen failed for path '%@' — group does not exist in HDF5 file", groupPath);
+        return [NSArray array];
+    }
+
     H5G_info_t groupInfo;
-    H5Gget_info(groupId, &groupInfo);
-    
+    if (H5Gget_info(groupId, &groupInfo) < 0) {
+        NSLog(@"WARNING: H5Gget_info failed for path '%@'", groupPath);
+        H5Gclose(groupId);
+        return [NSArray array];
+    }
+
     NSMutableArray *names = [NSMutableArray arrayWithCapacity:(uint)groupInfo.nlinks];
-    
+
     char name[STRING_MAX];
     for (int i = 0; i < groupInfo.nlinks; i++) {
         // Get member name
@@ -53,47 +61,59 @@
 
         [names addObject:cStringToString(name)];
     }
-    
+
     H5Gclose(groupId);
-    
+
     return names;
 }
 
 - (NSArray *)groupMemberLinkInfoInPath:(NSString *)groupPath;
 {
     hid_t groupId = H5Gopen(_fileId, stringToCString(groupPath), H5P_DEFAULT);
-    
+    if (groupId < 0) {
+        NSLog(@"WARNING: H5Gopen failed for path '%@' — group does not exist in HDF5 file", groupPath);
+        return [NSArray array];
+    }
+
     H5G_info_t groupInfo;
-    H5Gget_info(groupId, &groupInfo);
-    
+    if (H5Gget_info(groupId, &groupInfo) < 0) {
+        NSLog(@"WARNING: H5Gget_info failed for path '%@'", groupPath);
+        H5Gclose(groupId);
+        return [NSArray array];
+    }
+
     NSString *superGroupName = [groupPath isEqualToString:@"/"] ? @"/" : [groupPath stringByAppendingString:@"/"];
-    
+
     NSMutableArray *info = [NSMutableArray arrayWithCapacity:(uint)groupInfo.nlinks];
-    
+
     char name[STRING_MAX];
     for (int i = 0; i < groupInfo.nlinks; i++) {
         // Get member name
         ssize_t length = H5Lget_name_by_idx(groupId, ".", NULL, H5_ITER_NATIVE, i, NULL, STRING_MAX, H5P_DEFAULT);
         H5Lget_name_by_idx(groupId, ".", NULL, H5_ITER_NATIVE, i, name, length + 1, H5P_DEFAULT);
-        
+
         // Get member object info
         H5O_info_t objectInfo;
         H5Oget_info_by_name(groupId, name, &objectInfo, H5P_DEFAULT);
-        
+
         NSString *path = [superGroupName stringByAppendingString:cStringToString(name)];
         MACHdf5LinkInformation *linkInfo = [[MACHdf5LinkInformation alloc] initWithPath:path objectType:objectInfo.type];
-        
+
         [info addObject:linkInfo];
     }
-    
+
     H5Gclose(groupId);
-    
+
     return info;
 }
 
 - (NSArray *)allAttributeNamesOnPath:(NSString *)objectPath
 {
     hid_t objectId = H5Oopen(_fileId, stringToCString(objectPath), H5P_DEFAULT);
+    if (objectId < 0) {
+        NSLog(@"WARNING: H5Oopen failed for path '%@' — object does not exist in HDF5 file", objectPath);
+        return [NSArray array];
+    }
 
     H5O_info_t info;
     H5Oget_info(objectId, &info);
@@ -134,11 +154,14 @@
 - (BOOL)hasAttribute:(NSString *)attributeName onPath:(NSString *)objectPath
 {
     hid_t objectId = H5Oopen(_fileId, stringToCString(objectPath), H5P_DEFAULT);
+    if (objectId < 0) {
+        return NO;
+    }
 
     htri_t exists = H5Aexists(objectId, stringToCString(attributeName));
-    
+
     H5Oclose(objectId);
-    
+
     return exists > 0;
 }
 
@@ -645,9 +668,13 @@
 }
 
 - (NSDictionary *)readAttributesOnPath:(NSString *)objectPath
-{    
+{
     hid_t objectId = H5Oopen(_fileId, stringToCString(objectPath), H5P_DEFAULT);
-    
+    if (objectId < 0) {
+        NSLog(@"WARNING: H5Oopen failed for path '%@' — cannot read attributes", objectPath);
+        return [NSDictionary dictionary];
+    }
+
     NSArray *attributeNames = [self allAttributeNamesOnPath:objectPath];
     
     NSMutableDictionary *attributes = [NSMutableDictionary dictionaryWithCapacity:[attributeNames count]];

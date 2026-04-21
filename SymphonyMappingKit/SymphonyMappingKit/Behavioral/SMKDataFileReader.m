@@ -35,6 +35,8 @@
                 [_experimentPaths addObject:member.path];
             }
         }
+        NSLog(@"HDF5 root contains %lu top-level group(s) → %lu experiment path(s)",
+              (unsigned long)[rootMembers count], (unsigned long)[_experimentPaths count]);
     }
     return self;
 }
